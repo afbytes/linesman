@@ -1,12 +1,15 @@
 'use strict';
 
 const os = require('os');
-const DIFF_TIP = 'Note: they should be different.';
+const DIFF_TIP = '**Note**: they should be DIFFERENT.';
 
 let log = console.log;
 let errorCount = 0;
 
-function showErrorTip(evaluated, provided, tip = '') {
+function showErrorTip(evaluated, provided, option = {
+  tip: '',
+  isEvaluated: true,
+}) {
   let loc = 'Unknown location';
   let error;
 
@@ -34,10 +37,15 @@ function showErrorTip(evaluated, provided, tip = '') {
     loc = s;
   }
 
+  const tip = option.tip ? ' -- ' + option.tip : '';
+  const title_ = option.isEvaluated ? 'Evaluated' : 'Expected '; // with the same length
+  let out1 = evaluated;
+  let out2 = provided;
+
   const lines = [];
-  lines.push(`Assertion failed at: ${loc}.${tip ? ' -- ' + tip : ''}`);
-  lines.push(`   Evaluated : (${typeof evaluated}) ${_formatValue(evaluated)}`);
-  lines.push(`   Provided  : (${typeof provided}) ${_formatValue(provided)}`);
+  lines.push(`Assertion failed at: ${loc}.${tip}`);
+  lines.push(`   ${title_} : (${typeof out1}) ${_formatValue(out1)}`);
+  lines.push(`   Provided  : (${typeof out2}) ${_formatValue(out2)}`);
   log(lines.join(os.EOL));
   ++errorCount;
 }
@@ -63,19 +71,21 @@ function getErrorCount() {
 
 function ok(value) {
   if (!value) {
-    showErrorTip(true, !!value);
+    showErrorTip(true, !!value, {isEvaluated: false});
   }
 }
 
+// it should be false
 function not_ok(value) {
-  if (!value) {
-    showErrorTip(true, !value, DIFF_TIP);
+  if (value) {
+    showErrorTip(false, !!value, {isEvaluated: false});
   }
 }
 
+// it should be false
 function no(value) {
   if (value) {
-    showErrorTip(false, !!value);
+    showErrorTip(false, !!value, {isEvaluated: false});
   }
 }
 
@@ -99,7 +109,7 @@ function le(a, b) {
 function not_le(a, b) {
   // noinspection EqualityComparisonWithCoercionJS
   if (a == b) {
-    showErrorTip(a, b, DIFF_TIP);
+    showErrorTip(a, b, {tip: DIFF_TIP});
   }
 }
 
@@ -121,7 +131,7 @@ function se(a, b) {
  */
 function not_se(a, b) {
   if (a === b) {
-    showErrorTip(a, b, DIFF_TIP);
+    showErrorTip(a, b, {tip: DIFF_TIP});
   }
 }
 
@@ -149,7 +159,7 @@ function not_de(a, b) {
   const b2 = JSON.stringify(b);
 
   if (a2 === b2) {
-    showErrorTip(a, b, DIFF_TIP);
+    showErrorTip(a, b, {tip: DIFF_TIP});
   }
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "linesman",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The functions which show the filename and line numbers if the assertion fails, and then continue.",
   "author": "Zhiliang Feng <afbytes@163.com>",
   "repository": "https://www.github.com/afbytes/linesman",
@@ -12,13 +12,18 @@
   "engines": {
     "node": ">=6.0.0"
   },
+  "keywords": [
+    "assert",
+    "filename",
+    "linenumbers"
+  ],
   "devDependencies": {
     "eslint": "7.0.0"
   },
   "scripts": {
     "lint": "eslint index.js",
-    "demo1": "node demo-one.js",
-    "demo2": "node demo-two.js",
+    "demo1": "node demo-1.js",
+    "demo2": "node demo-2.js",
     "prepublishOnly": "eslint index.js"
   }
 }
