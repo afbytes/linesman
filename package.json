@@ -15,7 +15,8 @@
   "keywords": [
     "assert",
     "filename",
-    "linenumbers"
+    "linenumber",
+    "line number"
   ],
   "devDependencies": {
     "eslint": "7.0.0"
