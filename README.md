@@ -18,6 +18,8 @@ npm install -g linesman
 
 ## Usage
 
+For a demo project with more detail, please check [linesman-demo](https://github.com/afbytes/linesman-demo). 
+
 ### Demo 1
 
 Use positive logic by default:

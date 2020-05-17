@@ -25,14 +25,21 @@ function showErrorTip(evaluated, provided, option = {
     const parts = error.stack.split('\n'); // MUST use '\n' here
     // 0: error-message, 1: loc-thrown, 2: calling to this func
     let s = parts[3];
-    let idx = s.lastIndexOf(path.sep);
-    if (idx !== -1) {
-      s = s.substring(idx + 1);
-      s = s.replace(')', '');
+
+    const cwd = process.cwd() + path.sep;
+    if (s.indexOf(cwd) !== -1) {
+      s = s.substring(s.indexOf(cwd) + cwd.length);
+    } else { // fallback - use last '/' to separate
+      const idx = s.lastIndexOf(path.sep);
+      if (idx !== -1) {
+        s = s.substring(idx + 1);
+      }
     }
-    idx = s.lastIndexOf(':');
+
+    s = s.replace(')', '');
+    const idx = s.lastIndexOf(':');
     if (idx !== -1) {
-      s = s.substring(0, idx);
+      s = s.substring(0, idx); // remove the col number
     }
 
     loc = s;
