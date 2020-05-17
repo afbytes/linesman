@@ -1,6 +1,7 @@
 'use strict';
 
 const os = require('os');
+const path = require('path');
 const DIFF_TIP = '**Note**: they should be DIFFERENT.';
 
 let log = console.log;
@@ -21,10 +22,10 @@ function showErrorTip(evaluated, provided, option = {
   }
 
   if (error.stack) {
-    const parts = error.stack.split(os.EOL);
+    const parts = error.stack.split('\n'); // MUST use '\n' here
     // 0: error-message, 1: loc-thrown, 2: calling to this func
     let s = parts[3];
-    let idx = s.lastIndexOf('/');
+    let idx = s.lastIndexOf(path.sep);
     if (idx !== -1) {
       s = s.substring(idx + 1);
       s = s.replace(')', '');
