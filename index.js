@@ -2,6 +2,8 @@
 
 const os = require('os');
 const path = require('path');
+const assert = require('assert');
+const util = require('util');
 const DIFF_TIP = '**Note**: they should be DIFFERENT.';
 
 let log = console.log;
@@ -59,14 +61,7 @@ function showErrorTip(evaluated, provided, option = {
 }
 
 function _formatValue(value) {
-  const type = typeof value;
-  if (type === 'object') {
-    return JSON.stringify(value);
-  } else if (type === 'string') {
-    return `"${value}"`;
-  } else {
-    return value;
-  }
+  return util.inspect(value);
 }
 
 function clearErrorCount() {
@@ -149,10 +144,9 @@ function not_se(a, b) {
  * @param {object} b
  */
 function de(a, b) {
-  const a2 = JSON.stringify(a);
-  const b2 = JSON.stringify(b);
-
-  if (a2 !== b2) {
+  try {
+    assert.deepStrictEqual(a, b);
+  } catch (_) {
     showErrorTip(a, b);
   }
 }
@@ -163,12 +157,12 @@ function de(a, b) {
  * @param {object} b
  */
 function not_de(a, b) {
-  const a2 = JSON.stringify(a);
-  const b2 = JSON.stringify(b);
-
-  if (a2 === b2) {
-    showErrorTip(a, b, {tip: DIFF_TIP});
+  try {
+    assert.deepStrictEqual(a, b);
+  } catch (_) {
+    return;
   }
+  showErrorTip(a, b);
 }
 
 /**
